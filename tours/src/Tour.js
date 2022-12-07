@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Tour = ({ id, image, info, name, price }) => {
+const Tour = ({ id, image, info, name, price, removeTour }) => {
   //! Where we have the info we would need to setup a conditional rendering
   //! We will use substring() method which will returns part of the string from the starting index up to and excluding the end index, or the end of the string if it is not specified.
   const [readMore, setReadMore] = useState(false)
@@ -18,7 +18,9 @@ const Tour = ({ id, image, info, name, price }) => {
             {readMore ? 'Show Less' : 'Read More'}
           </button>
         </p>
-        <button className='delete-btn'>not interested</button>
+        <button className='delete-btn' onClick={() => removeTour(id)}>
+          not interested
+        </button>
       </footer>
     </article>
   )
