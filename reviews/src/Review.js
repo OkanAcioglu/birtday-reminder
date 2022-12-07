@@ -43,7 +43,15 @@ const Review = () => {
       return checkNumber(newIndex)
     })
   }
-
+  const randomPerson = () => {
+    let randomNumber = Math.floor(Math.random() * people.length)
+    //! Make sure different person will come at each click
+    if (randomNumber === index) {
+      randomNumber = index + 1 //! Can be minus 1
+    }
+    //! Now we will have problem that we could get bigger or smaller number so checkNumber() function added...
+    setIndex(checkNumber(randomNumber))
+  }
   return (
     <article className='review'>
       <div className='img-container'>
@@ -63,7 +71,9 @@ const Review = () => {
           <FaChevronRight />
         </button>
       </div>
-      <button className='random-btn'>suprise me</button>
+      <button className='random-btn' onClick={randomPerson}>
+        suprise me
+      </button>
     </article>
   )
 }
