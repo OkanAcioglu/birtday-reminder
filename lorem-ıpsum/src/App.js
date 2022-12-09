@@ -6,7 +6,16 @@ function App() {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log('hello world')
+    let amount = parseInt(count)
+    if (count <= 0) {
+      amount = 1
+    }
+    if (count > 8) {
+      amount = 8
+    }
+    const newText = data.slice(0, amount)
+    setText(newText)
+    setCount(0)
   }
   return (
     <section className='section-center'>
@@ -27,14 +36,17 @@ function App() {
         </button>
       </form>
       <article className='lorem-text'>
-        <p>
+        {/* <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate,
           fugiat.
         </p>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate,
           fugiat.
-        </p>
+        </p> */}
+        {text.map((para, index) => {
+          return <p key={index}>{para}</p>
+        })}
       </article>
     </section>
   )
