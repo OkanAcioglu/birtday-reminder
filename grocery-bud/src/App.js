@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react'
 import List from './List'
 import Alert from './Alert'
 
+const getLocalStorage = () => {
+  let list = localStorage.getItem('list')
+  if (list) {
+    return JSON.parse(localStorage.getItem('list'))
+  } else {
+    return []
+  }
+}
 function App() {
   const [name, setName] = useState('')
-  const [list, setList] = useState([]) // for local storage
+  const [list, setList] = useState(getLocalStorage) // for local storage
   const [isEditing, setIsEditing] = useState(false) // editing state
   const [editID, setEditID] = useState(null) // which item editing
   const [alert, setAlert] = useState({
@@ -59,7 +67,10 @@ function App() {
     setEditID(id)
     setName(specificItem.title)
   }
-
+  //! Using Local Storage
+  useEffect(() => {
+    localStorage.setItem('list', JSON.stringify(list))
+  }, [list])
   return (
     <section className='section-center'>
       <form className='grocery-form' onSubmit={handleSubmit}>
