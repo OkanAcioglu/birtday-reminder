@@ -7,12 +7,17 @@ function App() {
   const [list, setList] = useState([]) // for local storage
   const [isEditing, setIsEditing] = useState(false) // editing state
   const [editID, setEditID] = useState(null) // which item editing
-  const [alert, setAlert] = useState({ show: false, msg: '', type: '' }) // some different values and colors will be used
+  const [alert, setAlert] = useState({
+    show: false,
+    msg: '',
+    type: '',
+  }) // some different values and colors will be used
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!name) {
       //display alert
+      showAlert(true, 'danger', 'please enter value')
     } else if (name && isEditing) {
       // deal with edit
     } else {
@@ -23,11 +28,15 @@ function App() {
       setName('')
     }
   }
+  //! since there is multiple instance for alert, it is better to come up with function
+  const showAlert = (show = false, type = '', msg = '') => {
+    setAlert({ show, type, msg })
+  }
 
   return (
     <section className='section-center'>
       <form className='grocery-form' onSubmit={handleSubmit}>
-        {alert.show && <Alert />}
+        {alert.show && <Alert {...alert} removeAlert={showAlert} />}
         <h3>grocery bud</h3>
         <div className='form-control'>
           <input
