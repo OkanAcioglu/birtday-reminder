@@ -32,6 +32,14 @@ const AppProvider = ({ children }) => {
   const decrease = (id) => {
     dispatch({ type: 'DECREASE_ITEM', payload: id })
   }
+
+  //! We do not setup a new function instead we will use useEffect
+  //! Everytime our value in state changes we would want to call that useEffect
+
+  useEffect(() => {
+    dispatch({ type: 'GET_TOTALS' })
+  }, [state.cart])
+
   return (
     <AppContext.Provider
       value={{
