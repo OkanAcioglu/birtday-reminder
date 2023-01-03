@@ -8,7 +8,14 @@ import Follower from './Follower'
 //? This project is pagination on frontend
 function App() {
   const { loading, data } = useFetch()
+  const [page, setPage] = useState(0)
+  const [followers, setFollowers] = useState([])
 
+  //! When loading change re-run the callback
+  useEffect(() => {
+    if (loading) return
+    setFollowers(data[page])
+  }, [loading])
   return (
     <main>
       <div className='section-title'>
@@ -16,7 +23,7 @@ function App() {
         <div className='underline'></div>
         <section className='followers'>
           <div className='container'>
-            {data.map((follower) => {
+            {followers.map((follower) => {
               return <Follower key={follower.id} {...follower} />
             })}
           </div>
