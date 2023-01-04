@@ -15,7 +15,12 @@ function App() {
   useEffect(() => {
     if (loading) return
     setFollowers(data[page])
-  }, [loading])
+  }, [loading, page])
+
+  const handlePage = (index) => {
+    setPage(index)
+  }
+
   return (
     <main>
       <div className='section-title'>
@@ -27,6 +32,26 @@ function App() {
               return <Follower key={follower.id} {...follower} />
             })}
           </div>
+          {/* Buttons displayed even before loading... Create a conditional rendering so that display buttons if we are not loading */}
+          {!loading && (
+            <div className='btn-container'>
+              {data.map((item, index) => {
+                return (
+                  <button
+                    key={index}
+                    className={`page-btn ${
+                      index === page ? 'active-btn' : null
+                    }`}
+                    onClick={() => {
+                      handlePage(index)
+                    }}
+                  >
+                    {index + 1}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </section>
       </div>
     </main>
