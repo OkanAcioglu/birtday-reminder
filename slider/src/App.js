@@ -9,6 +9,25 @@ function App() {
 
   //! Depending on index we will manipulate activeSlide , nextSlide , lastSlide classes in the CSS
   //! activeSlide class will be display the slide , lastSlide will be left side of the activeSlide and nextSlide class will accumulate the other slides on right side of the activeSlide. Elements that have lastSlide and nextSlide classes will not be displayed because of overflow: hidder property.
+
+  //! Below functionality can be create inside of the buttons
+  useEffect(() => {
+    const lastIndex = people.length - 1
+    if (index < 0) {
+      setIndex(lastIndex)
+    }
+    if (index > lastIndex) {
+      setIndex(0)
+    }
+  }, [index, people])
+  //! Cleanup is important
+  useEffect(() => {
+    let slider = setInterval(() => {
+      setIndex(index + 1)
+    }, 3000)
+    return () => clearInterval(slider)
+  }, [index])
+
   return (
     <section className='section'>
       <div className='title'>
@@ -40,10 +59,20 @@ function App() {
             </article>
           )
         })}
-        <button className='prev'>
+        <button
+          className='prev'
+          onClick={() => {
+            setIndex(index - 1)
+          }}
+        >
           <FiChevronLeft />
         </button>
-        <button className='next'>
+        <button
+          className='next'
+          onClick={() => {
+            setIndex(index + 1)
+          }}
+        >
           <FiChevronRight />
         </button>
       </div>
