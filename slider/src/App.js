@@ -5,8 +5,10 @@ import data from './data'
 
 function App() {
   const [people, setPeople] = useState(data)
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(3)
 
+  //! Depending on index we will manipulate activeSlide , nextSlide , lastSlide classes in the CSS
+  //! activeSlide class will be display the slide , lastSlide will be left side of the activeSlide and nextSlide class will accumulate the other slides on right side of the activeSlide. Elements that have lastSlide and nextSlide classes will not be displayed because of overflow: hidder property.
   return (
     <section className='section'>
       <div className='title'>
@@ -17,10 +19,19 @@ function App() {
       <div className='section-center'>
         {people.map((person, personIndex) => {
           const { id, image, name, title, quote } = person
-          // more functionality coming
-
+          let position = 'nextSlide'
+          //! if the personIndex matches the index state this slide will get activeSlide class
+          if (personIndex === index) {
+            position = 'activeSlide'
+          }
+          if (
+            personIndex === index - 1 ||
+            (index === 0 && personIndex === people.length - 1)
+          ) {
+            position = 'lastSlide'
+          }
           return (
-            <article key={id}>
+            <article className={position} key={id}>
               <img src={image} alt={name} className='person-img' />
               <h4>{name}</h4>
               <p className='title'>{title}</p>
