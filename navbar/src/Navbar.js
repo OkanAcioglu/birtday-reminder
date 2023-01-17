@@ -4,17 +4,43 @@ import { links, social } from './data'
 import logo from './logo.svg'
 
 const Navbar = () => {
+  const [showLinks, setShowLinks] = useState(true)
+  const linksContainerRef = useRef(null) // for div
+  const linksRef = useRef(null) //for ul
+
+  useEffect(() => {
+    // check height for the links
+    const linksHeight = linksRef.current.getBoundingClientRect().height
+    //console.log(linksHeight)
+    if (showLinks) {
+      linksContainerRef.current.style.height = `${linksHeight}px`
+    } else {
+      linksContainerRef.current.style.height = '0px'
+    }
+  }, [showLinks])
+
   return (
     <nav>
       <div className='nav-center'>
         <div className='nav-header'>
           <img src={logo} alt='logo' />
-          <button className='nav-toggle'>
+          <button
+            className='nav-toggle'
+            onClick={() => {
+              setShowLinks(!showLinks)
+            }}
+          >
             <FaBars />
           </button>
         </div>
-        <div className='links-container show-container'>
-          <ul className='links'>
+        <div
+          // className={`${
+          //   showLinks ? 'links-container show-container' : 'links-container'
+          // }`}
+          className='links-container'
+          ref={linksContainerRef}
+        >
+          <ul className='links' ref={linksRef}>
             {links.map((link) => {
               const { id, url, text } = link
               return (
