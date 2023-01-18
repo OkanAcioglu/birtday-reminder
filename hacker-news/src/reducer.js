@@ -17,6 +17,12 @@ const reducer = (state, action) => {
         hits: action.payload.hits,
         nbPages: action.payload.nbPages,
       }
+    case REMOVE_STORY:
+      const newList = state.hits.filter((item) => {
+        return item.objectID !== action.payload
+      })
+
+      return { ...state, hits: newList }
     default:
       throw new Error(`no matching "${action.type}" action type`)
   }
