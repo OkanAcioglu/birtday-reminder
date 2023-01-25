@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
-
 import Photo from './Photo'
+//! in order to get anythink we have to provide API key...
+//! Use the env file to access the env access key...
 const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`
 const mainUrl = `https://api.unsplash.com/photos/`
 const searchUrl = `https://api.unsplash.com/search/photos/`
-
-// remove current scroll code
-// set default page to 1
-// setup two useEffects
-// don't run second on initial render
-// check for query value
-// if page 1 fetch images
-// otherwise setPage(1)
-// fix scroll functionality
 
 function App() {
   const [loading, setLoading] = useState(false)
@@ -25,20 +17,26 @@ function App() {
   const fetchImages = async () => {
     setLoading(true)
     let url
+
     const urlPage = `&page=${page}`
     const urlQuery = `&query=${query}`
+
     if (query) {
       url = `${searchUrl}${clientID}${urlPage}${urlQuery}`
     } else {
       url = `${mainUrl}${clientID}${urlPage}`
     }
+
     try {
       const response = await fetch(url)
       const data = await response.json()
+      //setPhotos(data)
+      //! Refactor the code to be avoid override...
       setPhotos((oldPhotos) => {
         if (query && page === 1) {
           return data.results
         } else if (query) {
+          //! image that coming from query case is in result object...
           return [...oldPhotos, ...data.results]
         } else {
           return [...oldPhotos, ...data]
@@ -46,12 +44,13 @@ function App() {
       })
       setNewImages(false)
       setLoading(false)
-    } catch (error) {
+    } catch (err) {
       setNewImages(false)
-
       setLoading(false)
+      console.log(err)
     }
   }
+
   useEffect(() => {
     fetchImages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,6 +63,7 @@ function App() {
     }
     if (!newImages) return
     if (loading) return
+
     setPage((oldPage) => oldPage + 1)
   }, [newImages])
 
@@ -72,7 +72,6 @@ function App() {
       setNewImages(true)
     }
   }
-
   useEffect(() => {
     window.addEventListener('scroll', event)
     return () => window.removeEventListener('scroll', event)
@@ -86,6 +85,7 @@ function App() {
     }
     setPage(1)
   }
+
   return (
     <main>
       <section className='search'>
@@ -93,9 +93,11 @@ function App() {
           <input
             type='text'
             placeholder='search'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
             className='form-input'
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value)
+            }}
           />
           <button type='submit' className='submit-btn' onClick={handleSubmit}>
             <FaSearch />
@@ -104,8 +106,9 @@ function App() {
       </section>
       <section className='photos'>
         <div className='photos-center'>
-          {photos.map((image, index) => {
-            return <Photo key={index} {...image} />
+          {photos.map((image) => {
+            //console.log(image)
+            return <Photo key={image.id} {...image} />
           })}
         </div>
         {loading && <h2 className='loading'>Loading...</h2>}
@@ -115,3 +118,9 @@ function App() {
 }
 
 export default App
+
+//! It is much better create a environment variables and then add that env file to the git ignore. So when we push it to the github, we can only see the name of the value.
+//! Location of the env file is extremly important and DO NOT put it in the src... Just place it in the root
+//! name must start with REACT_APP_ after that it is up to us...
+//! Whenever setup the .env file -> restart the dev server
+//! DO NOT FORGET to add .env file to the gitignore...
