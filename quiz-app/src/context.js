@@ -16,7 +16,33 @@ const tempUrl =
 const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
-  return <AppContext.Provider value='hello'>{children}</AppContext.Provider>
+  //! If waiting (true) display setup form , when waiting done (false) display questions
+  //! This app loading and waiting will be different. Waiting is for the form before construct url , loading is typical loading that used when fetching data...
+
+  const [waiting, setWaiting] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [questions, setQuestions] = useState([])
+  const [index, setIndex] = useState(0)
+  const [correct, setCorrect] = useState(0)
+  const [error, setError] = useState(false)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  return (
+    <AppContext.Provider
+      value={{
+        waiting,
+        loading,
+        questions,
+        index,
+        correct,
+        error,
+        isModalOpen,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  )
 }
 // make sure use
 export const useGlobalContext = () => {
